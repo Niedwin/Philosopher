@@ -6,7 +6,7 @@
 /*   By: guviure <guviure@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:02:38 by guviure           #+#    #+#             */
-/*   Updated: 2025/08/23 00:03:17 by guviure          ###   ########.fr       */
+/*   Updated: 2025/08/23 00:36:33 by guviure          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	parse_args(int argc, char *argv[], t_data *data)
 	data->number_of_philosopher = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);
-	data-> time_to_sleep = ft_atoi(argv[4]);
+	data->time_to_sleep = ft_atoi(argv[4]);
 	data->number_of_meals = -1;
 	if (argc == 6)
 		data->number_of_meals = ft_atoi(argv[5]);
@@ -90,7 +90,8 @@ void	*ft_routine(void *arg)
 void	*monitor_routine(void *arg)
 {
 	t_data *data;
-	int	i;
+	int		i;
+	int		all_ate_enough;
 	
 	data = (t_data *)arg;
 	while (1)
@@ -104,7 +105,14 @@ void	*monitor_routine(void *arg)
 				data->someone_is_dead = 1;
 				return (NULL);
 			}
+			if (data->number_of_meals != - 1 && data->philo[i].meals_eaten < data->number_of_meals)
+				all_ate_enough = 0;
 			i++;
+		}
+		if (data->number_of_meals != -1 && all_ate_enough)
+		{
+			data->someone_is_dead = 1;
+			return (NULL);
 		}
 		usleep(1000);
 	}
@@ -125,7 +133,10 @@ void	start_simulation(t_data *data)
 	pthread_create(&monitor, NULL, monitor_routine, data);
 	i = 0;
 	while (i < data->number_of_philosopher)
+	{
 		pthread_join(data->philo[i].thread, NULL);
+		i++;
+	}
 	pthread_join(monitor, NULL);
 }
 
@@ -140,6 +151,7 @@ void	end_simulation(t_data *data)
 	free(data->forks);
 	free(data->philo);
 }
+
 
 int	main(int argc, char *argv[])
 {

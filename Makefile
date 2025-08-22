@@ -1,36 +1,37 @@
 NAME = Philosopher
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -pthread
-LIBS = -L./Libft -lft
 SRCS = main.c \
 		initialisation.c \
-		philosopher.h \
-		utils.c 
+		utils.c \
 
 OBJS = $(SRCS:.c=.o)
 
-all:
-	@echo "\033[1;93m [WAIT] \033[0m\t\033[1;35mBuilding Philosopher...\033[0m"
-	@$(MAKE) --no-print-directory $(NAME)
+RED = \033[1;31m
+GREEN = \033[1;32m
+YELLOW = \033[1;33m
+BLUE = \033[1;34m
+MAGENTA = \033[1;35m
+CYAN = \033[1;36m
+RESET = \033[0m
 
+all: $(NAME)
 
 $(NAME): $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
-	@echo "\033[1;32m [OK]   \033[0m\t\033[1;35mPhilosopher built successfully!\033[0m"
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@echo "$(GREEN)[OK]$(RESET)\t$(MAGENTA)Philosopher built successfully!$(RESET)"
 
 %.o: %.c
-	@echo "\033[1;90m [COMPILE] \033[0m $<"
+	@echo "$(CYAN)[COMPILE]$(RESET) $<"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@rm -f $(OBJS)
-	@make -C clean --no-print-directory
-	@echo "\033[1;34m [CLEAN] \033[0m Object files removed."
+	@echo "$(BLUE)[CLEAN]$(RESET) Object files removed."
 
 fclean: clean
 	@rm -f $(NAME)
-	@make -C fclean --no-print-directory
-	@echo "\033[1;31m [FCLEAN] \033[0m Executable and object files removed."
+	@echo "$(RED)[FCLEAN]$(RESET) Executable and object files removed."
 
 re: fclean all
 
