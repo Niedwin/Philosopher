@@ -6,7 +6,7 @@
 /*   By: guviure <guviure@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:02:38 by guviure           #+#    #+#             */
-/*   Updated: 2025/08/22 23:35:37 by guviure          ###   ########.fr       */
+/*   Updated: 2025/08/23 00:03:17 by guviure          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,64 @@ void	*ft_routine(void *arg)
 		philo->meals_eaten++;
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
+		print_message(philo, "is sleeping");
+		smart_sleep(philo->data->time_to_sleep, philo->data);
 	}
+	return (NULL);
+}
+
+void	*monitor_routine(void *arg)
+{
+	t_data *data;
+	int	i;
+	
+	data = (t_data *)arg;
+	while (1)
+	{
+		i = 0;
+		while (i < data->number_of_philosopher)
+		{
+			if (get_time() - data->philo[i].last_meal > data->time_to_die)
+			{
+				print_message(&data->philo[i], "died");
+				data->someone_is_dead = 1;
+				return (NULL);
+			}
+			i++;
+		}
+		usleep(1000);
+	}
+}
+
+void	start_simulation(t_data *data)
+{
+	int			i;
+	pthread_t	monitor;
+
+	i = 0;
+	while (i < data->number_of_philosopher)
+	{
+		data->philo[i].last_meal = get_time();
+		pthread_create(&data->philo[i].thread, NULL, ft_routine, &data->philo[i]);
+		i++;
+	}
+	pthread_create(&monitor, NULL, monitor_routine, data);
+	i = 0;
+	while (i < data->number_of_philosopher)
+		pthread_join(data->philo[i].thread, NULL);
+	pthread_join(monitor, NULL);
+}
+
+void	end_simulation(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i< data->number_of_philosopher)
+		pthread_mutex_destroy(&data->forks[i++]);
+	pthread_mutex_destroy(&data->print_mutex);
+	free(data->forks);
+	free(data->philo);
 }
 
 int	main(int argc, char *argv[])

@@ -2,7 +2,10 @@ NAME = Philosopher
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -pthread
 LIBS = -L./Libft -lft
-SRCS = main.c
+SRCS = main.c \
+		initialisation.c \
+		philosopher.h \
+		utils.c 
 
 OBJS = $(SRCS:.c=.o)
 

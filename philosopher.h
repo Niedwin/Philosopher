@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: guviure <guviure@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/05 16:04:07 by guviure           #+#    #+#             */
-/*   Updated: 2025/08/20 19:03:59 by guviure          ###   ########.fr       */
+/*   Created: 2025/08/23 00:06:24 by guviure           #+#    #+#             */
+/*   Updated: 2025/08/23 00:07:32 by guviure          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,6 @@ typedef struct s_philo
 }	t_philo; 
 
 int	ft_atoi(const char *str);
+int	init_mutex_and_philos(t_data *data);
 
 #endif
-
