@@ -28,6 +28,8 @@ int	init_mutex(t_data *data)
 	}
 	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
 		return (0);
+	if (pthread_mutex_init(&data->death_mutex, NULL) != 0)
+		return (0);
 	return (1);
 }
 
@@ -48,6 +50,8 @@ int	init_philosophers(t_data *data)
 		data->philo[i].left_fork = &data->forks[i];
 		data->philo[i].right_fork = &data->forks[(i + 1)
 			% data->number_of_philosopher];
+		if (pthread_mutex_init(&data->philo[i].meal_mutex, NULL) != 0)
+			return (0);
 		i++;
 	}
 	return (1);
