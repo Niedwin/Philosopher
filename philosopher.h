@@ -43,6 +43,7 @@ typedef struct s_data
 	long			start_time;
 	int				someone_is_dead;
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	death_mutex;
 	pthread_mutex_t	*forks;
 	t_philo			*philo;
 }	t_data;
