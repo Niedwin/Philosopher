@@ -7,6 +7,8 @@ SRCS = main.c \
 		start_and_end.c \
 		routine.c \
 		monitor_routine.c \
+		mutex.c \
+		mutex2.c \
 
 OBJS = $(SRCS:.c=.o)
 
