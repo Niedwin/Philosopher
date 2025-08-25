@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "philosopher.h"
+
 void set_someone_is_dead(t_data *data, int value)
 {
     pthread_mutex_lock(&data->death_mutex);

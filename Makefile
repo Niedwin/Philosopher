@@ -1,4 +1,4 @@
-NAME = Philosopher
+NAME = philo
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -pthread
 SRCS = main.c \

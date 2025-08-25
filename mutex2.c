@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "philosopher.h"
+
 long get_last_meal(t_philo *philo)
 {
     long time;
