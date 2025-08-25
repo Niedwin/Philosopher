@@ -62,5 +62,11 @@ void	smart_sleep(long time_ms, t_data *data);
 void	*philo_routine(void *arg);
 void	*monitor_routine(void *arg);
 void	*ft_routine(void *arg);
+void	set_someone_is_dead(t_data *data, int value);
+int		get_someone_is_dead(t_data *data);
+void	increment_meals_eaten(t_philo *philo);
+int		get_meals_eaten(t_philo *philo);
+void	set_last_meal(t_philo *philo, long time);
+long	get_last_meal(t_philo *philo);
 
 #endif
