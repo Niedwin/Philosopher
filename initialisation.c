@@ -6,7 +6,7 @@
 /*   By: guviure <guviure@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 17:55:52 by guviure           #+#    #+#             */
-/*   Updated: 2025/08/23 01:34:29 by guviure          ###   ########.fr       */
+/*   Updated: 2025/08/25 18:32:44 by guviure          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ int	init_philosophers(t_data *data)
 	while (i < data->number_of_philosopher)
 	{
 		data->philo[i].id = i + 1;
-		data->philo[i].meals_eaten = 0;
-		data->philo[i].last_meal = 0;
 		data->philo[i].data = data;
 		data->philo[i].left_fork = &data->forks[i];
 		data->philo[i].right_fork = &data->forks[(i + 1)
 			% data->number_of_philosopher];
 		if (pthread_mutex_init(&data->philo[i].meal_mutex, NULL) != 0)
 			return (0);
+		set_last_meal(&data->philo[i], 0);
+		data->philo[i].meals_eaten = 0;
 		i++;
 	}
 	return (1);
