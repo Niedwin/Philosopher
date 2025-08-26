@@ -6,7 +6,7 @@
 /*   By: guviure <guviure@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 18:56:10 by guviure           #+#    #+#             */
-/*   Updated: 2025/08/25 18:23:33 by guviure          ###   ########.fr       */
+/*   Updated: 2025/08/27 00:20:58 by guviure          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,18 @@ void	smart_sleep(long time_ms, t_data *data)
 {
 	long	start_time;
 	long	elapsed_time;
+	int		is_dead;
 
 	start_time = get_time();
 	while (1)
 	{
+		pthread_mutex_lock(&data->death_mutex);
+		is_dead = data->someone_is_dead;
+		pthread_mutex_unlock(&data->death_mutex);
+		if (is_dead)
+			break ;
 		elapsed_time = get_time() - start_time;
 		if (elapsed_time >= time_ms)
-			break ;
-		if (data->someone_is_dead)
 			break ;
 		usleep(100);
 	}
@@ -41,11 +45,13 @@ void	print_message(t_philo *philo, char	*msg)
 {
 	long	time;
 
-	pthread_mutex_lock(&philo->data->print_mutex);
-	time = get_time() - philo->data->start_time;
+	pthread_mutex_lock(&philo->data->death_mutex);
 	if (!philo->data->someone_is_dead)
+	{
+		time = get_time() - philo->data->start_time;
 		printf("%ld %d %s\n", time, philo->id, msg);
-	pthread_mutex_unlock(&philo->data->print_mutex);
+	}
+	pthread_mutex_unlock(&philo->data->death_mutex);
 }
 
 int	ft_atoi(const char *str)

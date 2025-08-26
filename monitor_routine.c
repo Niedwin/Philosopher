@@ -6,7 +6,7 @@
 /*   By: guviure <guviure@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 01:57:18 by guviure           #+#    #+#             */
-/*   Updated: 2025/08/23 01:59:11 by guviure          ###   ########.fr       */
+/*   Updated: 2025/08/26 23:58:15 by guviure          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ static int	check_death(t_data *data)
 	i = 0;
 	while (i < data->number_of_philosopher)
 	{
-		if (get_time() - data->philo[i].last_meal > data->time_to_die)
+		if (get_time() - get_last_meal(&data->philo[i]) > data->time_to_die)
 		{
 			print_message(&data->philo[i], "died");
-			data->someone_is_dead = 1;
+			set_someone_is_dead(data, 1);
 			return (1);
 		}
 		i++;
@@ -41,7 +41,7 @@ static int	check_all_ate_enough(t_data *data)
 	all_ate_enough = 1;
 	while (i < data->number_of_philosopher)
 	{
-		if (data->philo[i].meals_eaten < data->number_of_meals)
+		if (get_meals_eaten(&data->philo[i]) < data->number_of_meals)
 		{
 			all_ate_enough = 0;
 			break ;
@@ -50,7 +50,7 @@ static int	check_all_ate_enough(t_data *data)
 	}
 	if (all_ate_enough)
 	{
-		data->someone_is_dead = 1;
+		set_someone_is_dead(data, 1);
 		return (1);
 	}
 	return (0);
@@ -63,6 +63,8 @@ void	*monitor_routine(void *arg)
 	data = (t_data *)arg;
 	while (1)
 	{
+		if (get_someone_is_dead(data))
+			return (NULL);
 		if (check_death(data))
 			return (NULL);
 		if (check_all_ate_enough(data))

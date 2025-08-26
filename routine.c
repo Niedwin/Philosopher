@@ -6,7 +6,7 @@
 /*   By: guviure <guviure@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 01:09:53 by guviure           #+#    #+#             */
-/*   Updated: 2025/08/23 01:58:24 by guviure          ###   ########.fr       */
+/*   Updated: 2025/08/27 00:06:23 by guviure          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,29 @@
 
 static void	philo_eat(t_philo *philo)
 {
-	pthread_mutex_lock(philo->left_fork);
+	pthread_mutex_t	*first_fork;
+	pthread_mutex_t	*second_fork;
+
+	if (philo->id % 2 == 0)
+	{
+		first_fork = philo->right_fork;
+		second_fork = philo->left_fork;
+	}
+	else
+	{
+		first_fork = philo->left_fork;
+		second_fork = philo->right_fork;
+	}
+	pthread_mutex_lock(first_fork);
 	print_message(philo, "has taken a fork");
-	pthread_mutex_lock(philo->right_fork);
+	pthread_mutex_lock(second_fork);
 	print_message(philo, "has taken a fork");
 	print_message(philo, "is eating");
 	set_last_meal(philo, get_time());
 	smart_sleep(philo->data->time_to_eat, philo->data);
 	increment_meals_eaten(philo);
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(second_fork);
+	pthread_mutex_unlock(first_fork);
 }
 
 static void	philo_sleep(t_philo *philo)
